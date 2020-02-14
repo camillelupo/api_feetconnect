@@ -1,41 +1,39 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const Express = require('express');
+const Mongoose = require('mongoose');
+const BodyParser = require('body-parser');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const app = Express();
+app.use(BodyParser.urlencoded({ extended: true }));
+app.use(BodyParser.json());
 
-var app = express();
+// connection to MongoDB
+Mongoose
+    .connect('mongodb+srv://'+  process.env.MONGO_ATLAS_ID +':' + process.env.MONGO_ATLAS_PW + '@cluster0-86rki.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connexion à la base de données réussie !'))
+    .catch(err => console.log(err));
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+// avoid CORS policy
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+/*app.use('/datas', require('./Routes/datas'));
+app.use('/users', require('./Routes/users'));*/
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+app.use((req, res, next) => {
+  const error = new Error("Not found");
+  error.status = 404;
+  next(error);
+});
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({
+    error: {
+      message: error.message
+    }
+  });
 });
 
 module.exports = app;
