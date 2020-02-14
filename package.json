@@ -1,0 +1,26 @@
+{
+  "name": "api-feetconnect",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "path": "^0.12.7",
+    "node-restful": "^0.2.6",
+    "jsonwebtoken": "^8.5.1",
+    "http": "0.0.0",
+    "body-parser": "^1.19.0",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "mongoose": "^5.9.0",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2",
+    "express-jwt": "^5.3.1"
+  }
+}
