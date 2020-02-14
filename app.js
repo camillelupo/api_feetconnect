@@ -19,8 +19,8 @@ app.use(function (req, res, next) {
   next();
 });
 
-/*app.use('/datas', require('./Routes/datas'));
-app.use('/users', require('./Routes/users'));*/
+app.use('/datas', require('./Routes/datas'));
+app.use('/users', require('./Routes/users'));
 
 app.use((req, res, next) => {
   const error = new Error("Not found");

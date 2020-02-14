@@ -41,3 +41,4 @@ const usersSchema = new Schema({
         default: null
     }
 });
+module.exports = mongoose.model('UsersController', usersSchema);
